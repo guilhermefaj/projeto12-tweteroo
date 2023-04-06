@@ -13,11 +13,14 @@ app.post("/sign-up", (req, res) => {
     if (!username || !avatar) {
         return res.status(400).send("Preencha todos os campos.")
     }
+    if (typeof username !== "string" || typeof avatar !== "string") {
+        return res.status(400).send("Preencha os campos corretamente.")
+    }
 
     const newUser = { id: users.length + 1, username, avatar }
     users.push(newUser)
 
-    res.send("OK")
+    res.status(201).send("OK")
 })
 
 app.post("/tweets", (req, res) => {
@@ -26,13 +29,16 @@ app.post("/tweets", (req, res) => {
         return res.status(401).send("UNAUTHORIZED")
     }
     if (!username || !tweet) {
-        return res.status(400).send("Preencha todos os campos")
+        return res.status(400).send("O campo não pode estar vazio.")
+    }
+    if (typeof tweet !== "string") {
+        return res.status(400).send("Preencha o campo corretamente.")
     }
 
     const newTweet = { id: tweets.length + 1, username, tweet }
     tweets.push(newTweet)
 
-    res.send("OK")
+    res.status(201).send("OK")
 })
 
 app.get("/tweets", (req, res) => {
