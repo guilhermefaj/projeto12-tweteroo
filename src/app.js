@@ -29,11 +29,30 @@ app.post("/tweets", (req, res) => {
         return res.status(400).send("Preencha todos os campos")
     }
 
-    const newTweet = { id: tweet.length + 1, username, tweet }
+    const newTweet = { id: tweets.length + 1, username, tweet }
     tweets.push(newTweet)
 
     res.send("OK")
 })
+
+app.get("/tweets", (req, res) => {
+    const reqTweets = [];
+
+    for (let i = 0; i < 10; i++) {
+        if (tweets[i]) {
+            const profile = users.find((user) => user.username === tweets[i].username);
+            const singleTweet = {
+                username: tweets[i].username,
+                avatar: profile ? profile.avatar : null,
+                tweet: tweets[i].tweet
+            };
+            reqTweets.push(singleTweet);
+        }
+    }
+
+    res.send(reqTweets);
+});
+
 
 const PORT = 5000;
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`))
